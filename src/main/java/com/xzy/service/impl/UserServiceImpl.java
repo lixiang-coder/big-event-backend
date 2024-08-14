@@ -24,4 +24,5 @@ public class UserServiceImpl implements UserService {
         // 密文存储
         userMapper.register(username, md5String);
     }
+
 }
