@@ -7,10 +7,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/category")
@@ -31,6 +30,14 @@ public class categoryController {
     public Result add(@RequestBody @Validated Category category) {
         categoryService.add(category);
         return Result.success();
+    }
+
+
+    @GetMapping
+    @Operation(summary = "查询文章分类列表")
+    public Result<List<Category>> list(){
+        List<Category> categoryList = categoryService.list();
+        return Result.success(categoryList);
     }
 
 }
