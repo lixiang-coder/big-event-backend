@@ -89,4 +89,18 @@ public class UserController {
         return Result.success(user);
     }
 
+    /**
+     * 更新用户信息
+     * 接口方法的实体参数上添加@Validated注解才能使实体类的成员变量上的注解生效（@Email、@NotNull、@NotEmpty）
+     *
+     * @param user
+     * @return
+     */
+    @Operation(summary = "更新用户信息")
+    @PutMapping("/update")
+    public Result update(@RequestBody @Validated User user) {
+        userService.update(user);
+        return Result.success();
+    }
+
 }

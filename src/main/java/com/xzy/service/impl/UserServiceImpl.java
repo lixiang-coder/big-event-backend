@@ -7,6 +7,8 @@ import com.xzy.utils.Md5Util;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Resource
@@ -23,6 +25,13 @@ public class UserServiceImpl implements UserService {
         String md5String = Md5Util.getMD5String(password);
         // 密文存储
         userMapper.register(username, md5String);
+    }
+
+
+    @Override
+    public void update(User user) {
+        //user.setUpdateTime(LocalDateTime.now());
+        userMapper.update(user);
     }
 
 }
