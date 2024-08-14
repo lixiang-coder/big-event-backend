@@ -55,8 +55,16 @@ public class categoryController {
      * Validated注解：完成参数校验
      */
     @PutMapping
+    @Operation(summary = "更新文章分类")
     public Result update(@RequestBody @Validated(Category.Update.class) Category category) {
         categoryService.update(category);
+        return Result.success();
+    }
+
+    @DeleteMapping
+    @Operation(summary = "删除文章分类")
+    public Result delete(Integer id){
+        categoryService.delete(id);
         return Result.success();
     }
 
