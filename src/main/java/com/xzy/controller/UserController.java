@@ -21,7 +21,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
-@Slf4j
 @Tag(name = "用户相关接口")
 @Validated
 public class UserController {
