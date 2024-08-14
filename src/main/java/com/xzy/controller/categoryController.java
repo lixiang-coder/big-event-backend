@@ -21,9 +21,6 @@ public class categoryController {
 
     /**
      * 新增文章分类
-     *
-     * @param category
-     * @return
      */
     @Operation(summary = "新增文章分类")
     @PostMapping
@@ -33,11 +30,34 @@ public class categoryController {
     }
 
 
+    /**
+     * 查询文章分类列表
+     */
     @GetMapping
     @Operation(summary = "查询文章分类列表")
-    public Result<List<Category>> list(){
+    public Result<List<Category>> list() {
         List<Category> categoryList = categoryService.list();
         return Result.success(categoryList);
+    }
+
+    /**
+     * 获取文章分类详情
+     */
+    @Operation(summary = "获取文章分类详情")
+    @GetMapping("/detail")
+    public Result<Category> detail(Integer id) {
+        Category category = categoryService.detail(id);
+        return Result.success(category);
+    }
+
+    /**
+     * 更新文章分类
+     * Validated注解：完成参数校验
+     */
+    @PutMapping
+    public Result update(@RequestBody @Validated Category category) {
+        categoryService.update(category);
+        return Result.success();
     }
 
 }

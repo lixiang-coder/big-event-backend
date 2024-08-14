@@ -35,4 +35,18 @@ public class CategoryServiceImpl implements CategoryService {
 
         return categoryMapper.list(userId);
     }
+
+
+    @Override
+    public Category detail(Integer id) {
+        return categoryMapper.detail(id);
+    }
+
+
+    @Override
+    public void update(Category category) {
+        // 补充属性值
+        category.setUpdateTime(LocalDateTime.now());
+        categoryMapper.update(category);
+    }
 }

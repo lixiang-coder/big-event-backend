@@ -5,14 +5,15 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+
 import java.time.LocalDateTime;
 @Data
 public class Category {
-
+    @NotNull    // 必须要传
     private Integer id;//主键ID
 
     // 非空校验
-    @NotEmpty
+    @NotEmpty   // 必须要传之外，如果是字符串还不能为空
     private String categoryName;//分类名称
 
     // 非空校验

@@ -18,4 +18,18 @@ public interface CategoryService {
      * @return
      */
     List<Category> list();
+
+    /**
+     * 获取文章分类详情
+     *
+     * @param id
+     * @return
+     */
+    Category detail(Integer id);
+
+    /**
+     * 更新文章分类
+     * @param category
+     */
+    void update(Category category);
 }
