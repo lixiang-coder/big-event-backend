@@ -118,4 +118,47 @@ public class UserController {
         return Result.success();
     }
 
+    /**
+     * 更新用户密码
+     * RequestBody注解：MVC框架会自动将请求体中的JSON数据转为Map集合对象
+     *
+     * @param params
+     * @return
+     */
+    @Operation(summary = "更新用户密码")
+    @PatchMapping("/updatePwd")
+    public Result updatePwd(@RequestBody Map<String, String> params) {
+        // 1.校验参数
+        String oldPwd = params.get("old_pwd");
+        String newPwd = params.get("new_pwd");
+        String rePwd = params.get("re_pwd");
+
+        // 非空且有值
+        if (oldPwd == null || newPwd == null || rePwd == null) {
+            return Result.error("参数错误");
+        }
+
+        if (oldPwd.isEmpty() || newPwd.isEmpty() || rePwd.isEmpty()) {
+            return Result.error("参数错误");
+        }
+
+        // 新密码和确认密码必须保持一致
+        if (!newPwd.equals(rePwd)) {
+            return Result.error("两次填写密码不一致");
+        }
+
+        // 代码走到这里表示参数没问题，接下来校验原密码是否正确
+        // 根据Authorization传的jwt令牌，确定用户身份
+        Map<String, Object> map = ThreadLocalUtil.get();
+        String username = (String) map.get("username");
+        User loginUser = userService.findByUserName(username);
+
+        if (!loginUser.getPassword().equals(Md5Util.getMD5String(oldPwd))) {
+            return Result.error("原密码填写不正确");
+        }
+
+        // 2.调用service，完成密码更新
+        userService.updatePwd(newPwd);
+        return Result.success();
+    }
 }

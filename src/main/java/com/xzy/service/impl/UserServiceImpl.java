@@ -39,9 +39,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateAvatar(String avatarUrl) {
+        // 根据Authorization传的jwt令牌，确定用户身份
         Map<String, Object> map = ThreadLocalUtil.get();
         Integer id = (Integer) map.get("id");
         userMapper.updateAvatar(avatarUrl, id);
     }
+
+
+    /**
+     * 更新用户密码
+     *
+     * @param newPwd
+     */
+    @Override
+    public void updatePwd(String newPwd) {
+        // 根据Authorization传的jwt令牌，确定用户身份
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Integer id = (Integer) map.get("id");
+
+        // 将加密后的密码存入
+        String md5String = Md5Util.getMD5String(newPwd);
+        userMapper.updatePwd(md5String,id);
+    }
+
 
 }

@@ -2,6 +2,8 @@ package com.xzy.service;
 
 import com.xzy.pojo.User;
 
+import java.util.Map;
+
 public interface UserService {
 
     /**
@@ -23,13 +25,21 @@ public interface UserService {
 
     /**
      * 更新用户信息
+     *
      * @param user
      */
     void update(User user);
 
     /**
      * 更新用户头像
+     *
      * @param avatarUrl
      */
     void updateAvatar(String avatarUrl);
+
+    /**
+     * 更新用户密码
+     * @param newPwd
+     */
+    void updatePwd(String newPwd);
 }
