@@ -7,3 +7,4 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true # 开启驼峰映射数据库的字段名
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开启sql日志

@@ -1,16 +1,14 @@
 package com.xzy.controller;
 
 import com.xzy.pojo.Article;
+import com.xzy.pojo.PageBean;
 import com.xzy.pojo.Result;
 import com.xzy.service.ArticleService;
-import com.xzy.utils.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 
 @RestController
@@ -44,6 +42,19 @@ public class ArticleController {
     public Result add(@RequestBody @Validated Article article) {
         articleService.add(article);
         return Result.success();
+    }
+
+    /**
+     * 文章列表(条件分页)
+     */
+    @GetMapping
+    @Operation(summary = "文章列表(条件分页)")
+    public Result<PageBean<Article>> list(Integer pageNum,
+                                          Integer pageSize,
+                                          @RequestParam(required = false) String categoryId,
+                                          @RequestParam(required = false) String state) {
+        PageBean<Article> pageBean = articleService.list(pageNum, pageSize, categoryId, state);
+        return Result.success(pageBean);
     }
 
 
