@@ -57,5 +57,34 @@ public class ArticleController {
         return Result.success(pageBean);
     }
 
+    /**
+     * 获取文章详情
+     */
+    @GetMapping("/detail")
+    @Operation(summary = "获取文章详情")
+    public Result<Article> detail(Integer id) {
+        Article article = articleService.detail(id);
+        return Result.success(article);
+    }
+
+    /**
+     * 更新文章
+     */
+    @PutMapping
+    @Operation(summary = "更新文章")
+    public Result update(@RequestBody Article article) {
+        articleService.update(article);
+        return Result.success();
+    }
+
+    /**
+     * 删除文章
+     */
+    @DeleteMapping
+    @Operation(summary = "删除文章")
+    public Result delete(Integer id){
+        articleService.delete(id);
+        return Result.success();
+    }
 
 }

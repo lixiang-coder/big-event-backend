@@ -54,4 +54,24 @@ public class ArticleServiceImpl implements ArticleService {
         pageBean.setItems(p.getResult());
         return pageBean;
     }
+
+
+    @Override
+    public Article detail(Integer id) {
+        return articleMapper.detail(id);
+    }
+
+
+    @Override
+    public void update(Article article) {
+        // 补充属性
+        article.setUpdateTime(LocalDateTime.now());
+        articleMapper.update(article);
+    }
+
+
+    @Override
+    public void delete(Integer id) {
+        articleMapper.delete(id);
+    }
 }
