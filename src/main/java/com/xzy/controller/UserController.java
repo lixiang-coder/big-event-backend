@@ -1,6 +1,5 @@
 package com.xzy.controller;
 
-
 import com.xzy.pojo.Result;
 import com.xzy.pojo.User;
 import com.xzy.service.UserService;
@@ -111,8 +110,7 @@ public class UserController {
 
     /**
      * 更新用户头像
-     *
-     * @URL 进行参数url校验
+     * URL 进行参数url校验
      */
     @Operation(summary = "更新用户头像")
     @PatchMapping("/updateAvatar")
