@@ -11,13 +11,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.Pattern;
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/user")
@@ -27,6 +29,9 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     @Operation(summary = "用户注册")
     @PostMapping("/register")
@@ -65,7 +70,11 @@ public class UserController {
             claims.put("id", loginUser.getId());
             claims.put("username", loginUser.getUsername());
             String token = JwtUtil.genToken(claims);
-            // 返回token
+            // 将token存入到redis中
+            ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
+            // 每次登录，都向redis中存入token
+            // 如果是个丧心病狂的用户，一段时间疯狂登录怎么办？redis的抗压一般很强，手动登录远远不会让redis奔溃，保底还设置了过期时间
+            operations.set(token, token, 1, TimeUnit.HOURS);
             return Result.success(token);
         }
 
@@ -92,9 +101,6 @@ public class UserController {
     /**
      * 更新用户信息
      * 接口方法的实体参数上添加@Validated注解才能使实体类的成员变量上的注解生效（@Email、@NotNull、@NotEmpty）
-     *
-     * @param user
-     * @return
      */
     @Operation(summary = "更新用户信息")
     @PutMapping("/update")
@@ -106,8 +112,6 @@ public class UserController {
     /**
      * 更新用户头像
      *
-     * @param avatarUrl
-     * @return
      * @URL 进行参数url校验
      */
     @Operation(summary = "更新用户头像")
@@ -120,13 +124,11 @@ public class UserController {
     /**
      * 更新用户密码
      * RequestBody注解：MVC框架会自动将请求体中的JSON数据转为Map集合对象
-     *
-     * @param params
-     * @return
+     * RequestHeader：从请求头中获取Authorization这个键的值
      */
     @Operation(summary = "更新用户密码")
     @PatchMapping("/updatePwd")
-    public Result updatePwd(@RequestBody Map<String, String> params) {
+    public Result updatePwd(@RequestBody Map<String, String> params, @RequestHeader("Authorization") String token) {
         // 1.校验参数
         String oldPwd = params.get("old_pwd");
         String newPwd = params.get("new_pwd");
@@ -158,6 +160,10 @@ public class UserController {
 
         // 2.调用service，完成密码更新
         userService.updatePwd(newPwd);
+        // 删除redis中的token
+        ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
+        // 手动删除redis中的token，从而使它失效
+        operations.getOperations().delete(token);
         return Result.success();
     }
 }
