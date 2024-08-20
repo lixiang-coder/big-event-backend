@@ -34,7 +34,7 @@ public class UserController {
 
     @Operation(summary = "用户注册")
     @PostMapping("/register")
-    public Result register(@Pattern(regexp = "^\\S{6,16}$") String username, @Pattern(regexp = "^\\S{6,16}$") String password) {
+    public Result register(@Pattern(regexp = "^\\S{5,16}$") String username, @Pattern(regexp = "^\\S{6,16}$") String password) {
         // 参数校验 使用validation用正则表达式进行校验
         /*if (username == null || username.length() <= 5 || username.length() >= 16
         && password == null || password.length() <= 5 || password.length() >= 16){
